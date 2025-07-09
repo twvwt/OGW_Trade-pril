@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OGWPlus Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./assets/css/admin.css">
+  <link rel="stylesheet" href="./assets/css/animations.css">
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>OGWPlus</h1>
+        <p>Admin Panel</p>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active" data-section="dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </li>
+          <li data-section="products">
+            <i class="fas fa-box-open"></i>
+            <span>Products</span>
+          </li>
+          <li data-section="orders">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+          </li>
+          <li data-section="users">
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+          </li>
+          <li data-section="admins" id="admins-section" style="display: none;">
+            <i class="fas fa-user-shield"></i>
+            <span>Admins</span>
+          </li>
+          <li data-section="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <img src="https://via.placeholder.com/40" alt="Admin Avatar">
+          <div class="user-info">
+            <span class="username">Admin</span>
+            <span class="role">Administrator</span>
+          </div>
+        </div>
+        <button id="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <h2 id="section-title">Dashboard</h2>
+        <div class="header-actions">
+          <div class="search-box">
+            <input type="text" placeholder="Search...">
+            <i class="fas fa-search"></i>
+          </div>
+          <div class="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Section -->
+      <section class="content-section active" id="dashboard-section">
+        <div class="stats-grid">
+          <div class="stat-card fade-in">
+            <div class="stat-icon">
+              <i class="fas fa-boxes"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Total Products</h3>
+              <p id="total-products">0</p>
+            </div>
+          </div>
+          <div class="stat-card fade-in">
+            <div class="stat-icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Total Orders</h3>
+              <p id="total-orders">0</p>
+            </div>
+          </div>
+          <div class="stat-card fade-in">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Total Users</h3>
+              <p id="total-users">0</p>
+            </div>
+          </div>
+          <div class="stat-card fade-in">
+            <div class="stat-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Total Revenue</h3>
+              <p id="total-revenue">$0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-container">
+          <div class="chart-card slide-up">
+            <h3>Sales Overview</h3>
+            <canvas id="sales-chart"></canvas>
+          </div>
+          <div class="chart-card slide-up">
+            <h3>Recent Orders</h3>
+            <div class="recent-orders">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-orders-body">
+                  <!-- Filled by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products Section -->
+      <section class="content-section" id="products-section">
+        <div class="section-header">
+          <h3>Product Management</h3>
+          <div class="section-actions">
+            <button class="btn btn-primary" id="add-product-btn">
+              <i class="fas fa-plus"></i> Add Product
+            </button>
+            <button class="btn btn-secondary" id="import-products-btn">
+              <i class="fas fa-file-import"></i> Import
+            </button>
+          </div>
+        </div>
+
+        <div class="products-table">
+          <div class="table-filters">
+            <div class="search-filter">
+              <input type="text" id="product-search" placeholder="Search products...">
+              <i class="fas fa-search"></i>
+            </div>
+            <select id="category-filter">
+              <option value="">All Categories</option>
+              <!-- Categories will be populated by JavaScript -->
+            </select>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+
+          <div class="table-pagination">
+            <button id="prev-page" disabled>Previous</button>
+            <span id="page-info">Page 1 of 1</span>
+            <button id="next-page" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Orders Section -->
+      <section class="content-section" id="orders-section">
+        <div class="section-header">
+          <h3>Order Management</h3>
+          <div class="section-actions">
+            <select id="order-status-filter">
+              <option value="">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="orders-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+
+          <div class="table-pagination">
+            <button id="prev-orders-page" disabled>Previous</button>
+            <span id="orders-page-info">Page 1 of 1</span>
+            <button id="next-orders-page" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Users Section -->
+      <section class="content-section" id="users-section">
+        <div class="section-header">
+          <h3>User Management</h3>
+        </div>
+
+        <div class="users-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Telegram ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Orders</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+
+          <div class="table-pagination">
+            <button id="prev-users-page" disabled>Previous</button>
+            <span id="users-page-info">Page 1 of 1</span>
+            <button id="next-users-page" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Admins Section -->
+      <section class="content-section" id="admins-section">
+        <div class="section-header">
+          <h3>Admin Management</h3>
+          <div class="section-actions">
+            <button class="btn btn-primary" id="add-admin-btn">
+              <i class="fas fa-plus"></i> Add Admin
+            </button>
+          </div>
+        </div>
+
+        <div class="admins-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admins-table-body">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section class="content-section" id="settings-section">
+        <div class="section-header">
+          <h3>Settings</h3>
+        </div>
+
+        <div class="settings-form">
+          <div class="form-group">
+            <label for="telegram-bot-token">Telegram Bot Token</label>
+            <input type="text" id="telegram-bot-token" placeholder="Enter bot token">
+          </div>
+          <div class="form-group">
+            <label for="admin-chat-id">Admin Chat ID</label>
+            <input type="text" id="admin-chat-id" placeholder="Enter chat ID">
+          </div>
+          <button class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="modal" id="product-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="product-modal-title">Add New Product</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="product-form">
+          <input type="hidden" id="product-id">
+          <div class="form-group">
+            <label for="product-name">Product Name</label>
+            <input type="text" id="product-name" required>
+          </div>
+          <div class="form-group">
+            <label for="product-description">Description</label>
+            <textarea id="product-description" rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="product-price">Price</label>
+              <input type="number" id="product-price" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label for="product-category">Category</label>
+              <input type="text" id="product-category" list="categories-list" required>
+              <datalist id="categories-list">
+                <!-- Categories will be populated by JavaScript -->
+              </datalist>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="product-stock">Stock</label>
+              <input type="number" id="product-stock" required>
+            </div>
+            <div class="form-group">
+              <label for="product-featured">Featured</label>
+              <select id="product-featured">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Product Images</label>
+            <div class="image-upload-container">
+              <div class="image-preview" id="image-preview">
+                <!-- Images will be shown here -->
+              </div>
+              <label for="product-images" class="upload-btn">
+                <i class="fas fa-cloud-upload-alt"></i> Upload Images
+              </label>
+              <input type="file" id="product-images" multiple accept="image/*" style="display: none;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Attributes</label>
+            <div class="attributes-grid">
+              <div class="form-group">
+                <label for="product-weight">Weight (kg)</label>
+                <input type="number" id="product-weight" step="0.01">
+              </div>
+              <div class="form-group">
+                <label for="product-dimensions">Dimensions</label>
+                <input type="text" id="product-dimensions" placeholder="L x W x H">
+              </div>
+              <div class="form-group">
+                <label for="product-color">Color</label>
+                <input type="text" id="product-color">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal">Cancel</button>
+        <button class="btn btn-primary" id="save-product-btn">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modal" id="admin-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Admin</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="admin-form">
+          <div class="form-group">
+            <label for="admin-username">Username</label>
+            <input type="text" id="admin-username" required>
+          </div>
+          <div class="form-group">
+            <label for="admin-password">Password</label>
+            <input type="password" id="admin-password" required>
+          </div>
+          <div class="form-group">
+            <label for="admin-role">Role</label>
+            <select id="admin-role" required>
+              <option value="admin">Admin</option>
+              <option value="superadmin">Super Admin</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal">Cancel</button>
+        <button class="btn btn-primary" id="save-admin-btn">Save Admin</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Modal -->
+  <div class="modal" id="import-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Import Products</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="import-form">
+          <div class="form-group">
+            <label for="import-file">Select CSV File</label>
+            <input type="file" id="import-file" accept=".csv" required>
+          </div>
+          <div class="form-group">
+            <p><small>CSV should contain columns: name, description, price, category, stock, images (pipe-separated URLs)</small></p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal">Cancel</button>
+        <button class="btn btn-primary" id="import-submit-btn">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div class="modal" id="order-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Order Details</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="order-info">
+          <div class="info-row">
+            <span class="info-label">Order ID:</span>
+            <span class="info-value" id="order-id">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Date:</span>
+            <span class="info-value" id="order-date">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status:</span>
+            <span class="info-value" id="order-status">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Total Amount:</span>
+            <span class="info-value" id="order-total">-</span>
+          </div>
+        </div>
+
+        <div class="order-items">
+          <h4>Items</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="order-items-body">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="customer-info">
+          <h4>Customer Information</h4>
+          <div class="info-grid">
+            <div class="info-group">
+              <h5>Shipping Address</h5>
+              <div id="shipping-address">
+                <!-- Filled by JavaScript -->
+              </div>
+            </div>
+            <div class="info-group">
+              <h5>Payment</h5>
+              <div id="payment-info">
+                <!-- Filled by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="status-actions">
+          <select id="order-status-select">
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <button class="btn btn-primary" id="update-status-btn">Update Status</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal active" id="login-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Admin Login</h3>
+      </div>
+      <div class="modal-body">
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-username">Username</label>
+            <input type="text" id="login-username" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="login-submit-btn">Login</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./assets/js/admin.js"></script>
+  <script src="./assets/js/product-form.js"></script>
+  <script src="./assets/js/chart.js"></script>
+</body>
+</html>

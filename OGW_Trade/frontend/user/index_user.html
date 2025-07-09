@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OGWPlus Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./assets/css/main.css">
+  <link rel="stylesheet" href="./assets/css/product-card.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button class="menu-btn" id="menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="logo">OGWPlus</h1>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="search-btn">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="icon-btn" id="favorites-btn">
+          <i class="fas fa-heart"></i>
+          <span class="badge" id="favorites-count">0</span>
+        </button>
+        <button class="icon-btn" id="cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="badge" id="cart-count">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-bar" id="search-bar">
+      <input type="text" placeholder="Search products..." id="search-input">
+      <button class="close-search" id="close-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories-container">
+      <div class="categories-scroll" id="categories-scroll">
+        <!-- Categories will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Featured Products -->
+      <section class="products-section">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="products-grid" id="featured-products">
+          <!-- Featured products will be populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- All Products -->
+      <section class="products-section">
+        <h2 class="section-title">All Products</h2>
+        <div class="products-grid" id="all-products">
+          <!-- All products will be populated by JavaScript -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="close-cart" id="close-cart">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="cart-items" id="cart-items">
+        <!-- Cart items will be populated by JavaScript -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span id="cart-total-amount">$0.00</span>
+        </div>
+        <button class="btn btn-primary" id="checkout-btn">Checkout</button>
+      </div>
+    </div>
+
+    <!-- Favorites Sidebar -->
+    <div class="favorites-sidebar" id="favorites-sidebar">
+      <div class="favorites-header">
+        <h3>Your Favorites</h3>
+        <button class="close-favorites" id="close-favorites">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="favorites-items" id="favorites-items">
+        <!-- Favorites items will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="product-modal" id="product-modal">
+      <div class="product-modal-content">
+        <button class="close-modal" id="close-product-modal">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="product-modal-images">
+          <div class="main-image">
+            <img id="modal-main-image" src="" alt="Product Image">
+          </div>
+          <div class="thumbnail-images" id="thumbnail-images">
+            <!-- Thumbnails will be populated by JavaScript -->
+          </div>
+        </div>
+        <div class="product-modal-details">
+          <h2 id="modal-product-name">Product Name</h2>
+          <div class="product-price">
+            <span id="modal-product-price">$0.00</span>
+            <span class="original-price" id="modal-original-price"></span>
+          </div>
+          <div class="product-rating">
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <span class="reviews">(24 reviews)</span>
+          </div>
+          <div class="product-description">
+            <p id="modal-product-description">Product description goes here...</p>
+          </div>
+          <div class="product-attributes">
+            <div class="attribute">
+              <span class="attribute-label">Weight:</span>
+              <span class="attribute-value" id="modal-product-weight">-</span>
+            </div>
+            <div class="attribute">
+              <span class="attribute-label">Dimensions:</span>
+              <span class="attribute-value" id="modal-product-dimensions">-</span>
+            </div>
+            <div class="attribute">
+              <span class="attribute-label">Color:</span>
+              <span class="attribute-value" id="modal-product-color">-</span>
+            </div>
+          </div>
+          <div class="product-actions">
+            <div class="quantity-selector">
+              <button class="quantity-btn" id="decrease-qty">
+                <i class="fas fa-minus"></i>
+              </button>
+              <span id="product-quantity">1</span>
+              <button class="quantity-btn" id="increase-qty">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <button class="btn btn-primary" id="add-to-cart-btn">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+          </div>
+          <button class="btn btn-outline" id="add-to-favorites-btn">
+            <i class="far fa-heart"></i> Add to Favorites
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+      <div class="checkout-modal-content">
+        <div class="checkout-header">
+          <h3>Checkout</h3>
+          <button class="close-modal" id="close-checkout-modal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="checkout-body">
+          <div class="checkout-section">
+            <h4>Shipping Information</h4>
+            <form id="shipping-form">
+              <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" required>
+              </div>
+              <div class="form-group">
+                <label for="address">Street Address</label>
+                <input type="text" id="address" required>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                  <label for="postal-code">Postal Code</label>
+                  <input type="text" id="postal-code" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" required>
+                  <option value="">Select Country</option>
+                  <option value="US">United States</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="CA">Canada</option>
+                  <!-- More countries can be added -->
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="checkout-section">
+            <h4>Payment Method</h4>
+            <div class="payment-methods">
+              <label class="payment-method">
+                <input type="radio" name="payment-method" value="card" checked>
+                <div class="payment-content">
+                  <i class="fas fa-credit-card"></i>
+                  <span>Credit/Debit Card</span>
+                </div>
+              </label>
+              <label class="payment-method">
+                <input type="radio" name="payment-method" value="crypto">
+                <div class="payment-content">
+                  <i class="fas fa-bitcoin"></i>
+                  <span>Crypto</span>
+                </div>
+              </label>
+              <label class="payment-method">
+                <input type="radio" name="payment-method" value="on_delivery">
+                <div class="payment-content">
+                  <i class="fas fa-money-bill-wave"></i>
+                  <span>Cash on Delivery</span>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="checkout-section">
+            <h4>Order Summary</h4>
+            <div class="order-summary">
+              <div class="order-items" id="checkout-items">
+                <!-- Order items will be populated by JavaScript -->
+              </div>
+              <div class="order-total">
+                <div class="total-row">
+                  <span>Subtotal:</span>
+                  <span id="checkout-subtotal">$0.00</span>
+                </div>
+                <div class="total-row">
+                  <span>Shipping:</span>
+                  <span id="checkout-shipping">$0.00</span>
+                </div>
+                <div class="total-row grand-total">
+                  <span>Total:</span>
+                  <span id="checkout-total">$0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="checkout-footer">
+          <button class="btn btn-primary" id="place-order-btn">Place Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/tg-webapp.js"></script>
+  <script src="./assets/js/cart.js"></script>
+  <script src="./assets/js/favorites.js"></script>
+</body>
+</html>
